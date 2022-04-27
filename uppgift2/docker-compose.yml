@@ -1,0 +1,42 @@
+#services = Service.objects.all()
+services:
+#database = Database.objects.all()
+  database:
+#volumes = Volume.objects.all()
+    volumes:
+      - "dbdata:/var/lib/postgresql/data"
+#build = Build.objects.all()
+    build:
+#context = Context.objects.all()
+      context: ./database
+#dockerfile = Dockerfile.objects.all()
+      dockerfile: Dockerfile
+#ports = Port.objects.all()
+    ports:
+      - "5432:5432"
+      
+#web = Service.objects.all()
+  website:
+#build = Build.objects.all()
+    build:
+      context: ./website
+#dockerfile = Dockerfile.objects.all()
+      dockerfile: Dockerfile
+#ports = Port.objects.all()
+    ports:
+      - "5000:5000"
+
+#worker = Service.objects.all()
+  worker:
+#build = Build.objects.all()
+    build:
+#context = Context.objects.all()
+      context: ./worker
+#dockerfile = Dockerfile.objects.all()
+      dockerfile: Dockerfile
+#depends_on = DependsOn.objects.all()
+    depends_on:
+      - database
+#volumes = Volume.objects.all()
+volumes:
+  dbdata:

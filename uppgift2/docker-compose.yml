@@ -1,42 +1,50 @@
-#services = Service.objects.all()
+# argument image instead of bui'ld**?
+# https://docs.docker.com/compose/compose-file/#image
+# -- Author: Christopher Ek and Lukas Eklund -- #
+# -- Version: 1.12.1 ---------------------------#
+# -- Date: 2020-09-10 --------------------------#
+# -- License: MIT ------------------------------#
+
+
+# All Services, database, web, worker
 services:
-#database = Database.objects.all()
+
+  # Database
   database:
-#volumes = Volume.objects.all()
     volumes:
       - "dbdata:/var/lib/postgresql/data"
-#build = Build.objects.all()
     build:
-#context = Context.objects.all()
+      # Where to find the source code
       context: ./database
-#dockerfile = Dockerfile.objects.all()
+      # Dockerfile name.
       dockerfile: Dockerfile
-#ports = Port.objects.all()
+    # Ports
     ports:
       - "5432:5432"
-      
-#web = Service.objects.all()
+      -
+  # Web
   website:
-#build = Build.objects.all()
+    # How this service is built
     build:
+      # Where the source code is
       context: ./website
-#dockerfile = Dockerfile.objects.all()
+      # Dockerfile name
       dockerfile: Dockerfile
-#ports = Port.objects.all()
+    # Ports
     ports:
       - "5000:5000"
 
-#worker = Service.objects.all()
+  # Worker
   worker:
-#build = Build.objects.all()
+    # How this service will build
     build:
-#context = Context.objects.all()
+      # Where the source code is
       context: ./worker
-#dockerfile = Dockerfile.objects.all()
+      # Dockerfile name
       dockerfile: Dockerfile
-#depends_on = DependsOn.objects.all()
+    # if database fails, do not turn on.
     depends_on:
       - database
-#volumes = Volume.objects.all()
+
 volumes:
   dbdata:

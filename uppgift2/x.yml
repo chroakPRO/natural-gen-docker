@@ -1,0 +1,121 @@
+
+services:
+  web:
+    # build, like ground pillar
+    build: # image
+      context: .
+      dockerfile: Dockerfile
+    # What ports are opened.
+    ports: # expose
+      - "80:80" # guest port: host port'
+    # what command will be run, entrypoint
+    command: # entrypoint
+      - bash
+    # environment variables
+    environment:
+      - "ENV_VAR=value"
+      - "ENV_VAR2=value2"
+    # where env file is.
+    env_file:
+      - .env
+    # dosent start if db is not up.
+    depends_on: # links
+      - db
+    # volumes
+    volumes:
+      - ./data:/data
+    extends:
+      file: docker-compose.yml
+      service: db
+    labels:
+      - "com.example.description=My application"
+      - "com.example.department=IT"
+      - "com.example.label-with-empty-value"
+      - "com.example.label-with-value=value"
+    dns: # dns
+      -
+    devices:
+      - /dev/sda:/dev/xvda:rwm
+
+
+# docker-compose.yml
+# notes
+# - https://docs.docker.com/compose/compose-file/compose-file-v1/
+
+# Building
+# build from dockerfile
+web:
+  build: .
+  ports:
+    - "80:80"
+  volumes:
+    - .:/usr/share/nginx/html
+  command:
+    - "nginx"
+
+# build from custom dockerfile
+web2:
+  build:
+    context: .
+    dockerfile: Dockerfile
+
+# build from image
+web3:
+  image: nginx
+  ports:
+    - "80:80"
+    - "443:443"
+    - "8080:8080"
+  volumes:
+    - .:/usr/share/nginx/html
+    - /var/run/docker.sock:/var/run/docker.sock
+  command:
+    - "nginx"
+
+
+  # Ports
+  test6:
+    image: nginx
+    ports:
+      - "80:80" # guest:host
+      - "3000"
+    # expose port
+    expose: ["3000"]
+
+  # Commands
+  web4:
+    image: nginx
+    command:
+      - "nginx"
+      - "-g"
+      - "daemon off;"
+  # command:
+  web5:
+    command: [nginx, exec, "-g", "daemon off;"]
+
+
+  # Env variables
+  web6:
+    image: nginx
+    environment:
+      - "VAR1=value1"
+      - "VAR2=value2"
+      - "VAR3=value3"
+    env_file:
+      - .env
+
+# Dependencies
+web7:
+  image: nginx
+  # make sure `db` is alive before starting
+  depends_on:
+    - db
+    - redis
+    - memcached
+  # makes the `db` service available as the hostname `database`
+  # (implies depends_on)
+  links:
+    - db:database
+    - redis
+
+

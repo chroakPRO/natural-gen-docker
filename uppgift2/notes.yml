@@ -1,0 +1,10 @@
+# docker-compose.yml
+
+1. build, image
+2. ports, expose
+3. command, entrypoint
+4. environment, env_file
+5. links, depends_on
+6. volumes, extends
+7. labels, dns, devices, 
+8. external_links, extra_hosts::

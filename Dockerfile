@@ -51,3 +51,4 @@ RUN apt-get install nvim
 
 # run the application
 ENTRYPOINT [ "./main" ] # Run the executable.
+
